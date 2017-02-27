@@ -19,6 +19,29 @@ base <- "http://chart.finance.yahoo.com/table.csv?s="
 remainder <- "&a=1&b=28&c=2014&d=1&e=24&f=2017&g=d&ignore=.csv"
 full_urls <- paste(base,index,remainder, sep = "")
 
+
+#a more generic function to grab any two dates
+#inputs:
+#symbol -- stock symbol, eg: MSFT
+#start_month, end_month -- month for start/end of period, value between 1 and 12. Leave out preceding zeroes
+#start_day, end_day -- day for start/end of period
+#start_year, end_year -- year for start/end of period
+#more error checking to come later
+generate_url <- function(symbol,start_month, start_day, start_year, end_month, end_day, end_year){
+    if (!(start_month %in% c(1:12))){
+        return ("the value for start month is invalid")
+    } else if(!(end_month %in% c(1:12))){
+        return ("the value for end month is invalid")
+    } else {
+            full_urls <- paste(base,index,remainder, sep = "")
+            base <- "http://chart.finance.yahoo.com/table.csv?s="
+            remainder <- paste("&a=", start_month - 1, "&b=", start_day, "&c=", start_year,
+                               "&d=", end_month-1, "&e=", end_day, "&f=", end_year,
+                               "&g=d&ignore=.csv", sep="")
+            full_urls <<- paste(base,symbol,remainder, sep = "")
+    }
+}
+
 #loop over urls and download the csvs
 for (i in 1:30){
     download.file(full_urls[i], destfile = paste(index[i], "csv", sep = "."))
