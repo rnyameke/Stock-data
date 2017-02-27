@@ -2,6 +2,8 @@
 #Rose Nyameke
 #This file downloads csvs directly from Yahoo Finance to use for this homework assignment
 
+#Date range is March 1 2014 to Feb 24 2017. However, March 1 was a Saturday, so data starts on March 3
+
 #set your working directory to match where you want the files to go
 setwd("C:/Users/Rose Nyameke/OneDrive - North Carolina State University/Classes/Spring/Spring 1/Financial Analytics/hw2/Stocks")
 
