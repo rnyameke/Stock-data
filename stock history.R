@@ -30,6 +30,8 @@ for (i in seq_along(files)){
 }
 
 #creating function to simplify return calculation
+#calculates return as Close - Open. Will be positive if net gain, negative if loss.
+#Rounds to 2 decimal places to avoid issues with floating point precision
 return_calc <- function(dataset){
     dataset$Returns <- round(dataset$Close - dataset$Open, digits = 2)
     return(dataset)
@@ -65,7 +67,3 @@ V<- return_calc(V)
 VZ<- return_calc(VZ)
 WMT <- return_calc(WMT)
 DIS <- return_calc(DIS)
-
-#calculating return as Close - Open. Will be positive if net gain, negative if loss.
-#Rounds to 2 decimal places to avoid issues with floating point precision
-data$Returns <- round(data$Close - data$Open, digits = 2)
