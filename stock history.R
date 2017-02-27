@@ -14,9 +14,9 @@ index <- c("AAPL", "AXP", "BA", "CAT", "CSCO", "CVX",
            "MRK", "MSFT", "NKE", "PFE", "PG", "TRV", 
            "UNH", "UTX", "V", "VZ", "WMT", "DIS")
 
-#create urls for CSVs
+#create urls for CSVs. Getting for one day ahead of time, so that we can have a lag for the first day of interest
 base <- "http://chart.finance.yahoo.com/table.csv?s="
-remainder <- "&a=2&b=1&c=2014&d=1&e=24&f=2017&g=d&ignore=.csv"
+remainder <- "&a=1&b=28&c=2014&d=1&e=24&f=2017&g=d&ignore=.csv"
 full_urls <- paste(base,index,remainder, sep = "")
 
 #loop over urls and download the csvs
@@ -31,11 +31,25 @@ for (i in seq_along(files)){
     assign(index[i], read.csv(files[i]))
 }
 
+
 #creating function to simplify return calculation
-#calculates return as Close - Open. Will be positive if net gain, negative if loss.
-#Rounds to 2 decimal places to avoid issues with floating point precision
+#calculates return as log of (adjusted close price/ lag of adjusted close price), based on Dr. L's macro
 return_calc <- function(dataset){
-    dataset$Returns <- round(dataset$Close - dataset$Open, digits = 2)
+    
+    #ensure that data set is sorted by date
+    dataset <- dataset[order(dataset$Date),]
+    
+    #calculate lags. puts a zero in the first spot
+    lags <- c(0, dataset$Adj.Close)
+    
+    #remove the last value of adj.close in the lags column
+    lags<- lags[-length(lags)]
+    
+    #merge with the data set
+    dataset$Lags <- lags
+    
+    #calculate returns
+    dataset$Returns <- log(dataset$Adj.Close/dataset$Lags)
     return(dataset)
 }
 
