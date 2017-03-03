@@ -14,6 +14,8 @@ index <- c("AAPL", "AXP", "BA", "CAT", "CSCO", "CVX",
            "MRK", "MSFT", "NKE", "PFE", "PG", "TRV", 
            "UNH", "UTX", "V", "VZ", "WMT", "DIS")
 
+index <- index[order(index)]
+
 #create urls for CSVs. Getting for one day ahead of time, so that we can have a lag for the first day of interest
 base <- "http://chart.finance.yahoo.com/table.csv?s="
 remainder <- "&a=1&b=28&c=2014&d=1&e=24&f=2017&g=d&ignore=.csv"
@@ -28,7 +30,6 @@ full_urls <- paste(base,index,remainder, sep = "")
 #start_year, end_year -- year for start/end of period
 
 generate_url <- function(symbol,start_month, start_day, start_year, end_month, end_day, end_year){
-    full_urls <- paste(base,index,remainder, sep = "")
     base <- "http://chart.finance.yahoo.com/table.csv?s="
     remainder <- paste("&a=", start_month - 1, "&b=", start_day, "&c=", start_year,
                        "&d=", end_month-1, "&e=", end_day, "&f=", end_year,
@@ -67,6 +68,10 @@ return_calc <- function(dataset){
     
     #calculate returns
     dataset$Returns <- log(dataset$Adj.Close/dataset$Lags)
+    #dataset$Returns <- log(dataset$Returns)
+    
+    #removing the first row, since it's the day before our start date
+    dataset <- dataset[-1,]
     return(dataset)
 }
 
