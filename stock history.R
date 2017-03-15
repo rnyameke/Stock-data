@@ -8,18 +8,18 @@
 setwd("C:/Users/Rose Nyameke/OneDrive - North Carolina State University/Classes/Spring/Spring 1/Financial Analytics/hw2/Stocks")
 
 #the tickers for the 30 stocks in the Dow Jones
-index <- c("AAPL", "AXP", "BA", "CAT", "CSCO", "CVX",
+tickers <- c("AAPL", "AXP", "BA", "CAT", "CSCO", "CVX",
            "KO", "DD", "XOM", "GE", "GS", "HD",
            "IBM", "INTC", "JNJ", "JPM", "MCD", "MMM", 
            "MRK", "MSFT", "NKE", "PFE", "PG", "TRV", 
            "UNH", "UTX", "V", "VZ", "WMT", "DIS")
 
-index <- index[order(index)]
+tickers <- tickers[order(tickers)]
 
 #create urls for CSVs. Getting for one day ahead of time, so that we can have a lag for the first day of interest
 base <- "http://chart.finance.yahoo.com/table.csv?s="
 remainder <- "&a=1&b=28&c=2014&d=1&e=24&f=2017&g=d&ignore=.csv"
-full_urls <- paste(base,index,remainder, sep = "")
+full_urls <- paste(base,tickers,remainder, sep = "")
 
 
 #a more generic function to grab any two dates
